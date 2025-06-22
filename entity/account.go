@@ -2,7 +2,6 @@ package entity
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,9 +13,12 @@ const (
 	CurrentAccount   AccountType = "CURRENT"
 	SavingsAccount   AccountType = "SAVINGS"
 	SavingsFDAccount AccountType = "SAVINGS_FD"
-	SavingsRDccount  AccountType = "SAVINGS_RD"
+	SavingsRDAccount AccountType = "SAVINGS_RD"
 	Cash             AccountType = "CASH"
 	CreditCard       AccountType = "CREDIT_CARD"
+	MutualFund       AccountType = "MUTUAL_FUNDS"
+	Stocks           AccountType = "STOCKS"
+	LoanAccount      AccountType = "LOAN"
 )
 
 type Account struct {
@@ -43,10 +45,10 @@ func getDefaultAccount() *Account {
 
 func NewAccount(name, linkedBank string, accountType AccountType, balance int64) (*Account, error) {
 	if name == "" {
-		return nil, errors.New(fmt.Sprintf("account name cannot be empty. name[:%s]", name))
+		return nil, errors.New("account name cannot be empty")
 	}
 	if accountType == "" {
-		return nil, errors.New(fmt.Sprintf("account type cannot be empty. accountType[:%s]", accountType))
+		return nil, errors.New("account type cannot be empty")
 	}
 	newAccount := getDefaultAccount()
 	newAccount.Name = name
@@ -64,14 +66,22 @@ func (ac *Account) AddMetadata(metadata Metadata) {
 	ac.Metadata = metadata
 }
 
-func (ac *Account) Deposit(amount int64) {
+func (ac *Account) Deposit(amount int64) error {
+	if amount <= 0 {
+		return errors.New("cannot deposit 0 or less amount")
+	}
 	ac.Balance += amount
+	return nil
 }
 
-func (ac *Account) Withdraw(amount int64) {
+func (ac *Account) Withdraw(amount int64) error {
+	if amount <= 0 {
+		return errors.New("cannot withdraw 0 or less amount")
+	}
 	ac.Balance -= amount
+	return nil
 }
 
 func (ac *Account) NegativeBalance() bool {
-	return ac.Balance >= 0
+	return ac.Balance <= 0
 }

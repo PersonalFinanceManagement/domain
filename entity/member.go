@@ -3,24 +3,27 @@ package entity
 import (
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
+
+type MemberType string
 
 type Member struct {
 	ID         string
 	Name       string
-	MemberType string
+	MemberType MemberType
 	Created    time.Time
 	Updated    time.Time
 }
 
 const (
-	primaryMember   string = "Primary Member"
-	secondaryMember string = "Secondary Member"
+	primaryMember   MemberType = "PRIMARY"
+	secondaryMember MemberType = "SECONDARY"
 )
 
-func NewMember(name, memberType string) (*Member, error) {
+func NewMember(name string, memberType MemberType) (*Member, error) {
 	if name == "" {
 		return nil, errors.New(fmt.Sprintf("name of member is mandatory. name:[%s]", name))
 	}

@@ -45,7 +45,7 @@ func NewBudget(name string, amount int64, startDate, endDate time.Time) (*Budget
 // RecordSpending updates the amount spent within the budget.
 func (b *Budget) RecordSpending(amount int64) error {
 	if amount <= 0 {
-		return errors.New(fmt.Sprintf("spending amount must be positive. amount:[%s]", amount))
+		return errors.New(fmt.Sprintf("spending amount must be positive. amount:[%d]", amount))
 	}
 	b.Spent += amount
 	return nil

@@ -3,23 +3,24 @@ package entity
 import (
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Budget struct {
 	ID          string
 	Name        string
 	Description string
-	Amount      float64
-	Spent       float64
+	Amount      int64
+	Spent       int64
 	StartDate   time.Time
 	EndDate     time.Time
 	Created     time.Time
 	Updated     time.Time
 }
 
-func NewBudget(name string, amount float64, startDate, endDate time.Time) (*Budget, error) {
+func NewBudget(name string, amount int64, startDate, endDate time.Time) (*Budget, error) {
 	if name == "" {
 		return nil, errors.New(fmt.Sprintf("budget name cannot be empty, name:[%s]", name))
 	}
@@ -42,7 +43,7 @@ func NewBudget(name string, amount float64, startDate, endDate time.Time) (*Budg
 }
 
 // RecordSpending updates the amount spent within the budget.
-func (b *Budget) RecordSpending(amount float64) error {
+func (b *Budget) RecordSpending(amount int64) error {
 	if amount <= 0 {
 		return errors.New(fmt.Sprintf("spending amount must be positive. amount:[%s]", amount))
 	}
@@ -51,7 +52,7 @@ func (b *Budget) RecordSpending(amount float64) error {
 }
 
 // Remaining amount from the budget allocated.
-func (b *Budget) RemainingAmount() float64 {
+func (b *Budget) RemainingAmount() int64 {
 	return b.Amount - b.Spent
 }
 

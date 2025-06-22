@@ -1,9 +1,6 @@
 package entity
 
 import (
-	"errors"
-	"fmt"
-	"github.com/google/uuid"
 	"time"
 )
 
@@ -13,7 +10,7 @@ type TransactionType struct {
 
 type Transaction struct {
 	ID          string
-	Amount      float64
+	Amount      int64
 	Pending     bool
 	Type        TransactionType
 	Source      Account

@@ -2,4 +2,4 @@ module domain
 
 go 1.24.4
 
-require github.com/PersonalFinanceManagement/common v0.1.0 // indirect
+require github.com/google/uuid v1.6.0

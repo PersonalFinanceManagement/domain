@@ -22,13 +22,13 @@ type Budget struct {
 
 func NewBudget(name string, amount int64, startDate, endDate time.Time) (*Budget, error) {
 	if name == "" {
-		return nil, errors.New(fmt.Sprintf("budget name cannot be empty, name:[%s]", name))
+		return nil, errors.New("budget name cannot be empty")
 	}
 	if amount < 0 {
-		return nil, errors.New(fmt.Sprintf("budget cannot have negative amount, amount[%f]", amount))
+		return nil, errors.New("budget cannot have negative amount")
 	}
 	if endDate.Before(startDate) {
-		return nil, errors.New(fmt.Sprintf("end date of budget has to be after start date. startDate:[%v] - endDate:[%v]", startDate, endDate))
+		return nil, errors.New("end date of budget has to be after start date")
 	}
 	return &Budget{
 		ID:        uuid.New().String(),

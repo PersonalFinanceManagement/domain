@@ -1,4 +1,4 @@
-module domain
+module "github.com/PersonalFinanceManagement/domain"
 
 go 1.24.4
 

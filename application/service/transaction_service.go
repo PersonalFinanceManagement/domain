@@ -7,11 +7,13 @@ import (
 
 type TransactionService struct {
 	transactionRepo repository.TransactionRepository
+	settingsRepo    repository.SettingsRepository
 }
 
-func NewTransactionService(transRepo repository.TransactionRepository) *TransactionService {
+func NewTransactionService(transRepo repository.TransactionRepository, settingsRepo repository.SettingsRepository) *TransactionService {
 	return &TransactionService{
 		transactionRepo: transRepo,
+		settingsRepo:    settingsRepo,
 	}
 }
 
@@ -55,15 +57,15 @@ func (ts *TransactionService) CreateExpense(transInput CreateTransactionInput) (
 
 // get the default transaction account id , something like a default ID field of the expense type
 func (ts *TransactionService) getDefaultExpenseDestinationAccountId() string {
-	return ""
+	return ts.settingsRepo.GetDefaultExpenseDestinationAccountID()
 }
 
 // get the default transaction account id , something like EXPENSE_EXIT
 func (ts *TransactionService) getDefaultExpensePayee() string {
-	return ""
+	return ts.settingsRepo.GetDefaultExpensePayee()
 }
 
 // get the default transaction category id
 func (ts *TransactionService) getDefaultExpenseCategoryID() string {
-	return ""
+	return ts.settingsRepo.GetDefaultExpenseCategoryID()
 }

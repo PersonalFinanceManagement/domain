@@ -29,22 +29,47 @@ type CreateTransactionInput struct {
 	MethodOfPayment      entity.MethodOfPayment
 }
 
-func (ts *TransactionService) CreateExpense(transInput CreateTransactionInput) (*entity.Transaction, error) {
-	if transInput.TransactionType == entity.Expense {
-		// get the default transactionAccountId for expense type transaction
-		if transInput.DestinationAccountId == "" {
-			transInput.DestinationAccountId = ts.getDefaultExpenseDestinationAccountId()
+func (ts *TransactionService) CreateExpense(input CreateTransactionInput) (*entity.Transaction, error) {
+
+	switch input.TransactionType {
+	case entity.Expense:
+		if input.Payee == "" {
+			input.Payee = ts.getDefaultExpensePayee()
 		}
-		if transInput.Payee == "" {
-			transInput.Payee = ts.getDefaultExpensePayee()
+		if input.CategoryId == "" {
+			input.CategoryId = ts.getDefaultExpenseCategoryID()
 		}
-		if transInput.CategoryId == "" {
-			transInput.CategoryId = ts.getDefaultExpenseCategoryID()
+		if input.DestinationAccountId == "" {
+			input.DestinationAccountId = ts.getDefaultExpenseDestinationAccountId()
+		}
+	case entity.Income:
+		if input.Payee == "" {
+			input.Payee = ts.getDefaultIncomePayee()
+		}
+		if input.CategoryId == "" {
+			input.CategoryId = ts.getDefaultIncomeCategoryID()
+		}
+		if input.SourceAccountId == "" {
+			input.SourceAccountId = ts.getDefaultIncomeSourceAccountId()
+		}
+	case entity.Transfer:
+		if input.Payee == "" {
+			input.Payee = ts.getDefaultTransferPayee()
+		}
+		if input.CategoryId == "" {
+			input.CategoryId = ts.getDefaultTransferCategoryID()
+		}
+		if input.SourceAccountId == "" {
+			input.SourceAccountId = ts.getDefaultTransferSourceAccountId()
+		}
+		if input.DestinationAccountId == "" {
+			input.DestinationAccountId = ts.getDefaultTransferDestinationAccountId()
 		}
 	}
+
 	tx, err := entity.NewTransaction(
-		transInput.Amount, transInput.Pending, transInput.TransactionType, transInput.SourceAccountId, transInput.DestinationAccountId,
-		transInput.Payee, transInput.CategoryId, transInput.Description, transInput.MethodOfPayment)
+		input.Amount, input.Pending, input.TransactionType, input.SourceAccountId, input.DestinationAccountId,
+		input.Payee, input.CategoryId, input.Description, input.MethodOfPayment)
 	if err != nil {
 		return nil, err
 	}
@@ -57,15 +82,60 @@ func (ts *TransactionService) CreateExpense(transInput CreateTransactionInput) (
 
 // get the default transaction account id , something like a default ID field of the expense type
 func (ts *TransactionService) getDefaultExpenseDestinationAccountId() string {
-	return ts.settingsRepo.GetDefaultExpenseDestinationAccountID()
+	// return ts.settingsRepo.GetDefaultExpenseDestinationAccountID()
+	return "<<EXPENSE_ACCOUNT_ID>>"
 }
 
 // get the default transaction account id , something like EXPENSE_EXIT
 func (ts *TransactionService) getDefaultExpensePayee() string {
-	return ts.settingsRepo.GetDefaultExpensePayee()
+	// return ts.settingsRepo.GetDefaultExpensePayee()
+	return "EXPENSOR"
 }
 
 // get the default transaction category id
 func (ts *TransactionService) getDefaultExpenseCategoryID() string {
-	return ts.settingsRepo.GetDefaultExpenseCategoryID()
+	// return ts.settingsRepo.GetDefaultExpenseCategoryID()
+	return "<<EXPENSE_CATEGORY_ID>>"
+}
+
+// get the default transaction account id , something like a default ID field of the expense type
+func (ts *TransactionService) getDefaultIncomeSourceAccountId() string {
+	// return ts.settingsRepo.GetDefaultExpenseDestinationAccountID()
+	return "<<INCOME_ACCOUNT_ID>>"
+}
+
+// get the default transaction account id , something like EXPENSE_EXIT
+func (ts *TransactionService) getDefaultIncomePayee() string {
+	// return ts.settingsRepo.GetDefaultExpensePayee()
+	return "<<INCOMOR>>"
+}
+
+// get the default transaction category id
+func (ts *TransactionService) getDefaultIncomeCategoryID() string {
+	// return ts.settingsRepo.GetDefaultExpenseCategoryID()
+	return "<<INCOME_CATEGORY_ID>>"
+}
+
+// get the default transaction account id , something like a default ID field of the expense type
+func (ts *TransactionService) getDefaultTransferSourceAccountId() string {
+	// return ts.settingsRepo.GetDefaultExpenseDestinationAccountID()
+	return "<<TRANSFER_SOURCE_ACCOUNT_ID>>"
+
+}
+
+func (ts *TransactionService) getDefaultTransferDestinationAccountId() string {
+	// return ts.settingsRepo.GetDefaultExpenseDestinationAccountID()
+	return "<<TRANSFER_DESTINATION_ACCOUNT_ID>>"
+
+}
+
+// get the default transaction account id , something like EXPENSE_EXIT
+func (ts *TransactionService) getDefaultTransferPayee() string {
+	return "<<TRANSFORMER>>"
+}
+
+// get the default transaction category id
+func (ts *TransactionService) getDefaultTransferCategoryID() string {
+	// return ts.settingsRepo.GetDefaultExpenseCategoryID()
+	return "<<TRANSFER_CATEGORY_ID>>"
 }

@@ -43,14 +43,8 @@ type Transaction struct {
 	Updated time.Time
 }
 
-type TransactionDetails struct {
-	ID                  string
-	Name                string
-	Description         string
-	TransactionCategory string
-}
-
-func NewTransaction(amount int64, pending bool, transactionType TransactionType, sourceAccountId, destinationAccountId string) (*Transaction, error) {
+func NewTransaction(amount int64, pending bool, transactionType TransactionType,
+	sourceAccountId, destinationAccountId, payee, categoryId, description string, methodOfPayment MethodOfPayment) (*Transaction, error) {
 	if amount <= 0 {
 		return nil, errors.New("amount for transaction cannot be 0 or negative")
 	}
@@ -64,6 +58,9 @@ func NewTransaction(amount int64, pending bool, transactionType TransactionType,
 		Type:                 transactionType,
 		SourceAccountID:      sourceAccountId,
 		DestinationAccountID: destinationAccountId,
+		CategoryId:           categoryId,
+		Description:          description,
+		MethodOfPayment:      methodOfPayment,
 		Created:              time.Now().UTC(),
 		Updated:              time.Now().UTC(),
 	}, nil

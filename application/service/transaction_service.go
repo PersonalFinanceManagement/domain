@@ -7,13 +7,16 @@ import (
 
 type TransactionService struct {
 	transactionRepo repository.TransactionRepository
-	settingsRepo    repository.SettingsRepository
+	// settingsRepo    repository.SettingsRepository
 }
 
-func NewTransactionService(transRepo repository.TransactionRepository, settingsRepo repository.SettingsRepository) *TransactionService {
+func NewTransactionService(transRepo repository.TransactionRepository,
+
+// settingsRepo repository.SettingsRepository
+) *TransactionService {
 	return &TransactionService{
 		transactionRepo: transRepo,
-		settingsRepo:    settingsRepo,
+		// settingsRepo:    settingsRepo,
 	}
 }
 
